@@ -232,3 +232,30 @@ cd dejagnu-1.6.1
 make install
 make check
 #END-DejaGNU
+
+#m4
+cd ../
+tar -xf $LFS/sources/m4-1.4.18.tar.xz
+cd m4-1.4.18
+sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
+echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
+./configure --prefix=/tools
+make -j6
+make check
+make install
+#END-m4
+
+#Ncurses
+cd ../
+tar -zxvf $LFS/sources/ncurses-6.1.tar.gz
+cd ncurses-6.1
+sed -i s/mawk// configure
+./configure --prefix=/tools \
+            --with-shared   \
+            --without-debug \
+            --without-ada   \
+            --enable-widec  \
+            --enable-overwrite
+make -j6
+make install
+#END-Ncurses
