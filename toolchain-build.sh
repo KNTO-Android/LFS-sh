@@ -109,4 +109,19 @@ echo 'int main(){}' > dummy.c
 $LFS_TGT-gcc dummy.c
 readelf -l a.out | grep ': /tools'
 rm -v dummy.c a.out
+#END-glibc
 
+#Libstdc++ 
+rm -rf build
+mkdir -v build
+cd       build
+../libstdc++-v3/configure           \
+    --host=$LFS_TGT                 \
+    --prefix=/tools                 \
+    --disable-multilib              \
+    --disable-nls                   \
+    --disable-libstdcxx-threads     \
+    --disable-libstdcxx-pch         \
+    --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/8.2.0
+make -j6
+make install
