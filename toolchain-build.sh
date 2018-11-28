@@ -3,7 +3,6 @@ mkdir -v build
 cd build
 
 #binutils 1
-echo binutils-2.31.1
 xz -dc  $LFS/sources/binutils-2.31.1.tar.xz | tar xfv -
 cd binutils-2.31.1
 mkdir -v build
@@ -19,11 +18,9 @@ case $(uname -m) in
   x86_64) mkdir -v /tools/lib && ln -sv lib /tools/lib64 ;;
 esac
 make install
-echo END binutils-2.31.1
 #END-binutils 1
 
 #GCC 1
-echo GCC
 cd ../../
 tar -xf $LFS/sources/gcc-8.2.0.tar.xz
 cd gcc-8.2.0
@@ -211,3 +208,27 @@ make install
 chmod -v u+w /tools/lib/libtcl8.6.so
 make install-private-headers
 ln -sv tclsh8.6 /tools/bin/tclsh
+#END-tcl8
+
+#Expect
+cd ../../
+tar -jxvf $LFS/sources/expat-2.2.6.tar.bz2
+cd expat-2.2.6
+cp -v configure{,.orig}
+sed 's:/usr/local/bin:/bin:' configure.orig > configure
+./configure --prefix=/tools       \
+            --with-tcl=/tools/lib \
+            --with-tclinclude=/tools/include
+make -j6
+make test
+make SCRIPTS="" install
+#END-Expect
+
+#DejaGNU
+cd ../
+tar -zxvf $LFS/sources/dejagnu-1.6.1.tar.gz
+cd dejagnu-1.6.1
+./configure --prefix=/tools
+make install
+make check
+#END-DejaGNU
