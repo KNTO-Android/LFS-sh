@@ -198,3 +198,16 @@ cc dummy.c
 readelf -l a.out | grep ': /tools'
 rm -v dummy.c a.out
 #END-GCC 2
+
+#tcl
+cd ../../
+tar -zxvf $LFS/sources/tcl8.6.8-src.tar.gz
+cd tcl8.6.8
+cd unix
+./configure --prefix=/tools
+make -j6
+TZ=UTC make test
+make install
+chmod -v u+w /tools/lib/libtcl8.6.so
+make install-private-headers
+ln -sv tclsh8.6 /tools/bin/tclsh
