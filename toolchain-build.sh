@@ -288,3 +288,85 @@ cd bzip2-1.0.6
 make -j6
 make PREFIX=/tools install
 #END-bzip2
+
+#coreutils
+cd ../
+tar tar -xf $LFS/sources/coreutils-8.30.tar.xz
+cd coreutils-8.30
+./configure --prefix=/tools --enable-install-program=hostname
+make -j6
+make RUN_EXPENSIVE_TESTS=yes check
+make install
+#END-coreutils
+
+#diffutils
+cd ../
+tar tar -xf $LFS/sources/diffutils-3.6.tar.xz
+cd diffutils-3.6
+./configure --prefix=/tools
+make -j6
+make install
+#END-diffutils
+
+#file
+cd ../
+tar -zxvf $LFS/sources/file-5.34.tar.gz
+cd file-5.34
+./configure --prefix=/tools
+make -j6
+make install
+#END-file
+
+#findutils
+cd ../
+tar -zxvf $LFS/sources/findutils-4.6.0.tar.gz
+cd findutils-4.6.0
+sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' gl/lib/*.c
+sed -i '/unistd/a #include <sys/sysmacros.h>' gl/lib/mountlist.c
+echo "#define _IO_IN_BACKUP 0x100" >> gl/lib/stdio-impl.h
+./configure --prefix=/tools
+make -j6
+make install
+#END-findutils
+
+#gawk
+cd ../
+tar tar -xf $LFS/sources/gawk-4.2.1.tar.xz
+cd gawk-4.2.1
+./configure --prefix=/tools
+make -j6
+make install
+#END-gawk
+
+#gettext
+cd ../
+tar tar -xf $LFS/sources/gettext-0.19.8.1.tar.xz
+cd gettext-0.19.8.1
+cd gettext-tools
+EMACS="no" ./configure --prefix=/tools --disable-shared
+make -C gnulib-lib
+make -C intl pluralx.c
+make -C src msgfmt
+make -C src msgmerge
+make -C src xgettext
+cp -v src/{msgfmt,msgmerge,xgettext} /tools/bin
+#END-gettext
+
+#grep
+cd ../../
+tar tar -xf $LFS/sources/grep-3.1.tar.xz
+cd grep-3.1
+./configure --prefix=/tools
+make -j6
+make install
+#END-grep
+
+#gzip
+cd ../
+tar tar -xf $LFS/sources/gzip-1.9.tar.xz
+sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
+echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
+./configure --prefix=/tools
+make -j6
+make install
+#END-gzip
