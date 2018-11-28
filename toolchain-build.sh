@@ -259,3 +259,32 @@ sed -i s/mawk// configure
 make -j6
 make install
 #END-Ncurses
+
+#bash
+cd ../
+tar -zxvf $LFS/sources/bash-4.4.18.tar.gz
+cd bash-4.4.18
+./configure --prefix=/tools --without-bash-malloc
+make -j6
+make tests
+make install
+ln -sv bash /tools/bin/sh
+#END-bash
+
+#bison
+cd ../
+tar -zxvf $LFS/sources/bash-4.4.18.tar.gz
+cd bash-4.4.18
+./configure --prefix=/tools
+make -j6
+make check
+make install
+#END-bison
+
+#bzip2
+cd ../
+tar -zxvf $LFS/sources/bzip2-1.0.6.tar.gz
+cd bzip2-1.0.6
+make -j6
+make PREFIX=/tools install
+#END-bzip2
