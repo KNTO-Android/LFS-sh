@@ -1,6 +1,7 @@
 #!/bin/bash
 mkdir -v build
 cd build
+
 #binutils
 echo binutils-2.31.1
 xz -dc  $LFS/sources/binutils-2.31.1.tar.xz | tar xfv -
@@ -19,7 +20,9 @@ case $(uname -m) in
 esac
 make install
 echo END binutils-2.31.1
-#binutils
+#END-binutils
+
+#GCC
 echo GCC
 cd ../../
 tar -xf $LFS/sources/gcc-8.2.0.tar.xz
@@ -74,3 +77,36 @@ cd       build
     --enable-languages=c,c++
 make -j6
 make install
+#END-GCC
+
+#kernel headers install
+cd ../../
+tar -xf $LFS/sources/linux-4.18.5.tar.xz
+cd linux-4.18.5
+make mrproper
+make INSTALL_HDR_PATH=dest headers_install
+cp -rv dest/include/* /tools/include
+#END-kernel headers install
+
+#glibc
+cd ../
+tar -xf $LFS/sources/glibc-2.28.tar.xz
+cd glibc-2.28
+mkdir -b build
+cd build
+../configure                             \
+      --prefix=/tools                    \
+      --host=$LFS_TGT                    \
+      --build=$(../scripts/config.guess) \
+      --enable-kernel=3.2             \
+      --with-headers=/tools/include      \
+      libc_cv_forced_unwind=yes          \
+      libc_cv_c_cleanup=yes
+make -j6
+make install
+
+echo 'int main(){}' > dummy.c
+$LFS_TGT-gcc dummy.c
+readelf -l a.out | grep ': /tools'
+rm -v dummy.c a.out
+
