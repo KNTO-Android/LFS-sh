@@ -92,7 +92,7 @@ cp -rv dest/include/* /tools/include
 cd ../
 tar -xf $LFS/sources/glibc-2.28.tar.xz
 cd glibc-2.28
-mkdir -b build
+mkdir -v build
 cd build
 ../configure                             \
       --prefix=/tools                    \
