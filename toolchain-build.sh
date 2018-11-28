@@ -13,7 +13,7 @@ cd build
              --target=$LFS_TGT          \
              --disable-nls              \
              --disable-werror
-make -j6
+make -j8
 case $(uname -m) in
   x86_64) mkdir -v /tools/lib && ln -sv lib /tools/lib64 ;;
 esac
@@ -72,7 +72,7 @@ cd       build
     --disable-libvtv                               \
     --disable-libstdcxx                            \
     --enable-languages=c,c++
-make -j6
+make -j8
 make install
 #END-GCC 1
 
@@ -99,7 +99,7 @@ cd build
       --with-headers=/tools/include      \
       libc_cv_forced_unwind=yes          \
       libc_cv_c_cleanup=yes
-make -j6
+make -j8
 make install
 
 echo 'int main(){}' > dummy.c
@@ -122,7 +122,7 @@ cd       build
     --disable-libstdcxx-threads     \
     --disable-libstdcxx-pch         \
     --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/8.2.0
-make -j6
+make -j8
 make install
 #END-Libstdc++
 
@@ -141,7 +141,7 @@ RANLIB=$LFS_TGT-ranlib         \
     --disable-werror           \
     --with-lib-path=/tools/lib \
     --with-sysroot
-make -j6
+make -j8
 make install
 make -C ld clean
 make -C ld LIB_PATH=/usr/lib:/lib
@@ -187,7 +187,7 @@ RANLIB=$LFS_TGT-ranlib                             \
     --disable-multilib                             \
     --disable-bootstrap                            \
     --disable-libgomp
-make -j6
+make -j8
 make install
 ln -sv gcc /tools/bin/cc
 echo 'int main(){}' > dummy.c
@@ -202,8 +202,7 @@ tar -zxvf $LFS/sources/tcl8.6.8-src.tar.gz
 cd tcl8.6.8
 cd unix
 ./configure --prefix=/tools
-make -j6
-TZ=UTC make test
+make -j8
 make install
 chmod -v u+w /tools/lib/libtcl8.6.so
 make install-private-headers
@@ -219,8 +218,7 @@ sed 's:/usr/local/bin:/bin:' configure.orig > configure
 ./configure --prefix=/tools       \
             --with-tcl=/tools/lib \
             --with-tclinclude=/tools/include
-make -j6
-make test
+make -j8
 make SCRIPTS="" install
 #END-Expect
 
@@ -230,7 +228,6 @@ tar -zxvf $LFS/sources/dejagnu-1.6.1.tar.gz
 cd dejagnu-1.6.1
 ./configure --prefix=/tools
 make install
-make check
 #END-DejaGNU
 
 #m4
@@ -240,8 +237,7 @@ cd m4-1.4.18
 sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
 echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
 ./configure --prefix=/tools
-make -j6
-make check
+make -j8
 make install
 #END-m4
 
@@ -256,7 +252,7 @@ sed -i s/mawk// configure
             --without-ada   \
             --enable-widec  \
             --enable-overwrite
-make -j6
+make -j8
 make install
 #END-Ncurses
 
@@ -265,8 +261,7 @@ cd ../
 tar -zxvf $LFS/sources/bash-4.4.18.tar.gz
 cd bash-4.4.18
 ./configure --prefix=/tools --without-bash-malloc
-make -j6
-make tests
+make -j8
 make install
 ln -sv bash /tools/bin/sh
 #END-bash
@@ -276,8 +271,7 @@ cd ../
 tar -zxvf $LFS/sources/bash-4.4.18.tar.gz
 cd bash-4.4.18
 ./configure --prefix=/tools
-make -j6
-make check
+make -j8
 make install
 #END-bison
 
@@ -285,26 +279,26 @@ make install
 cd ../
 tar -zxvf $LFS/sources/bzip2-1.0.6.tar.gz
 cd bzip2-1.0.6
-make -j6
+make -j8
 make PREFIX=/tools install
 #END-bzip2
 
 #coreutils
 cd ../
-tar tar -xf $LFS/sources/coreutils-8.30.tar.xz
+tar -xf $LFS/sources/coreutils-8.30.tar.xz
 cd coreutils-8.30
 ./configure --prefix=/tools --enable-install-program=hostname
-make -j6
+make -j8
 make RUN_EXPENSIVE_TESTS=yes check
 make install
 #END-coreutils
 
 #diffutils
 cd ../
-tar tar -xf $LFS/sources/diffutils-3.6.tar.xz
+tar -xf $LFS/sources/diffutils-3.6.tar.xz
 cd diffutils-3.6
 ./configure --prefix=/tools
-make -j6
+make -j8
 make install
 #END-diffutils
 
@@ -313,7 +307,7 @@ cd ../
 tar -zxvf $LFS/sources/file-5.34.tar.gz
 cd file-5.34
 ./configure --prefix=/tools
-make -j6
+make -j8
 make install
 #END-file
 
@@ -325,22 +319,22 @@ sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' gl/lib/*.c
 sed -i '/unistd/a #include <sys/sysmacros.h>' gl/lib/mountlist.c
 echo "#define _IO_IN_BACKUP 0x100" >> gl/lib/stdio-impl.h
 ./configure --prefix=/tools
-make -j6
+make -j8
 make install
 #END-findutils
 
 #gawk
 cd ../
-tar tar -xf $LFS/sources/gawk-4.2.1.tar.xz
+tar -xf $LFS/sources/gawk-4.2.1.tar.xz
 cd gawk-4.2.1
 ./configure --prefix=/tools
-make -j6
+make -j8
 make install
 #END-gawk
 
 #gettext
 cd ../
-tar tar -xf $LFS/sources/gettext-0.19.8.1.tar.xz
+tar -xf $LFS/sources/gettext-0.19.8.1.tar.xz
 cd gettext-0.19.8.1
 cd gettext-tools
 EMACS="no" ./configure --prefix=/tools --disable-shared
@@ -354,19 +348,67 @@ cp -v src/{msgfmt,msgmerge,xgettext} /tools/bin
 
 #grep
 cd ../../
-tar tar -xf $LFS/sources/grep-3.1.tar.xz
+tar -xf $LFS/sources/grep-3.1.tar.xz
 cd grep-3.1
 ./configure --prefix=/tools
-make -j6
+make -j8
 make install
 #END-grep
 
 #gzip
 cd ../
-tar tar -xf $LFS/sources/gzip-1.9.tar.xz
+tar -xf $LFS/sources/gzip-1.9.tar.xz
 sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
 echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
 ./configure --prefix=/tools
-make -j6
+make -j8
 make install
 #END-gzip
+
+#make
+cd ../
+tar -jxvf $LFS/sources/make-4.2.1.tar.bz2
+cd make-4.2.1
+sed -i '211,217 d; 219,229 d; 232 d' glob/glob.c
+./configure --prefix=/tools --without-guile
+make -j8
+make install
+#END-make
+
+#patch
+cd ../
+tar -xf $LFS/sources/patch-2.7.6.tar.xz
+cd patch-2.7.6
+./configure --prefix=/tools
+make -j8
+make install
+#END-patch
+
+#perl
+cd ../
+tar -xf $LFS/sources/perl-5.28.0.tar.xz
+cd perl-5.28.0
+sh Configure -des -Dprefix=/tools -Dlibs=-lm -Uloclibpth -Ulocincpth
+make -j8
+cp -v perl cpan/podlators/scripts/pod2man /tools/bin
+mkdir -pv /tools/lib/perl5/5.28.0
+cp -Rv lib/* /tools/lib/perl5/5.28.0
+#END-perl
+
+#sed
+cd ../
+tar -xf $LFS/sources/sed-4.5.tar.xz
+cd sed-4.5
+./configure --prefix=/tools
+make -j8
+make install
+#END-sed
+
+#tar
+cd ../
+tar -xf $LFS/sources/tar-1.30.tar.xz
+cd tar-1.30
+./configure --prefix=/tools
+make -j8
+make install
+#END-tar
