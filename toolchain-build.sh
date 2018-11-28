@@ -2,7 +2,7 @@
 mkdir -v build
 cd build
 
-#binutils
+#binutils 1
 echo binutils-2.31.1
 xz -dc  $LFS/sources/binutils-2.31.1.tar.xz | tar xfv -
 cd binutils-2.31.1
@@ -20,7 +20,7 @@ case $(uname -m) in
 esac
 make install
 echo END binutils-2.31.1
-#END-binutils
+#END-binutils 1
 
 #GCC
 echo GCC
@@ -127,3 +127,26 @@ cd       build
     --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/8.2.0
 make -j6
 make install
+#END-Libstdc++
+
+#binutils 2
+cd ../../
+cd binutils-2.31.1
+rm -rf build
+mkdir -v build
+cd       build
+CC=$LFS_TGT-gcc                \
+AR=$LFS_TGT-ar                 \
+RANLIB=$LFS_TGT-ranlib         \
+../configure                   \
+    --prefix=/tools            \
+    --disable-nls              \
+    --disable-werror           \
+    --with-lib-path=/tools/lib \
+    --with-sysroot
+make -j6
+make install
+make -C ld clean
+make -C ld LIB_PATH=/usr/lib:/lib
+cp -v ld/ld-new /tools/bin
+#END-binutils 2
