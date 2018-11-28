@@ -111,7 +111,9 @@ readelf -l a.out | grep ': /tools'
 rm -v dummy.c a.out
 #END-glibc
 
-#Libstdc++ 
+#Libstdc++
+cd ../../
+cd gcc-8.2.0
 rm -rf build
 mkdir -v build
 cd       build
