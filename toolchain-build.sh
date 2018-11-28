@@ -289,7 +289,6 @@ tar -xf $LFS/sources/coreutils-8.30.tar.xz
 cd coreutils-8.30
 ./configure --prefix=/tools --enable-install-program=hostname
 make -j8
-make RUN_EXPENSIVE_TESTS=yes check
 make install
 #END-coreutils
 
@@ -412,3 +411,43 @@ cd tar-1.30
 make -j8
 make install
 #END-tar
+
+#Textinfo
+cd ../
+tar -xf $LFS/sources/texinfo-6.5.tar.xz
+cd texinfo-6.5
+./configure --prefix=/tools
+make -j8
+make install
+#END-Textinfo
+
+#util-linux
+cd ../
+tar -xf $LFS/sources/util-linux-2.32.1.tar.xz
+cd util-linux-2.32.1
+./configure --prefix=/tools                \
+            --without-python               \
+            --disable-makeinstall-chown    \
+            --without-systemdsystemunitdir \
+            --without-ncurses              \
+            PKG_CONFIG=""
+make -j8
+make install
+#END-util-linux
+
+#XZ
+cd ../
+tar -xf $LFS/sources/xz-5.2.4.tar.xz
+cd xz-5.2.4
+./configure --prefix=/tools
+make -j8
+make install
+#END-XZ
+echo "END build for toolchains"
+
+#strip
+strip --strip-debug /tools/lib/*
+/usr/bin/strip --strip-unneeded /tools/{,s}bin/*
+rm -rf /tools/{,share}/{info,man,doc}
+find /tools/{lib,libexec} -name \*.la -delete
+#END-strip
