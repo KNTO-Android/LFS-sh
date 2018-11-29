@@ -211,8 +211,8 @@ ln -sv tclsh8.6 /tools/bin/tclsh
 
 #Expect
 cd ../../
-tar -jxvf $LFS/sources/expat-2.2.6.tar.bz2
-cd expat-2.2.6
+tar -zxvf $LFS/sources/expect5.45.4.tar.gz
+cd expect5.45.4
 cp -v configure{,.orig}
 sed 's:/usr/local/bin:/bin:' configure.orig > configure
 ./configure --prefix=/tools       \
@@ -269,7 +269,7 @@ ln -sv bash /tools/bin/sh
 #bison
 cd ../
 tar -xf $LFS/sources/bison-3.0.5.tar.xz
-cd bash-4.4.18
+cd bison-3.0.5
 ./configure --prefix=/tools
 make -j8
 make install
