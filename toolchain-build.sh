@@ -268,7 +268,7 @@ ln -sv bash /tools/bin/sh
 
 #bison
 cd ../
-tar -zxvf $LFS/sources/bash-4.4.18.tar.gz
+tar -xf $LFS/sources/bison-3.0.5.tar.xz
 cd bash-4.4.18
 ./configure --prefix=/tools
 make -j8
