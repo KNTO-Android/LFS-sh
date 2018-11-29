@@ -444,10 +444,3 @@ make -j8
 make install
 #END-XZ
 echo "END build for toolchains"
-
-#strip
-strip --strip-debug /tools/lib/*
-/usr/bin/strip --strip-unneeded /tools/{,s}bin/*
-rm -rf /tools/{,share}/{info,man,doc}
-find /tools/{lib,libexec} -name \*.la -delete
-#END-strip
