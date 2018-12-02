@@ -8,7 +8,7 @@
 07 base-system2.sh  
 08 base-system3.sh  
 09 base-system4.sh  
-10 dosfstools.sh__
+10 dosfstools.sh  
 ***
 #### ライセンス  
 現在はライセンスを設定しておりません。
